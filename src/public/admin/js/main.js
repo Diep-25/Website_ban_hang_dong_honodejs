@@ -356,4 +356,22 @@
       },
     });
   });
+
+
+  $('.js-render-discount').click(function () {
+    const randomDiscount = generateRandomString(8);
+    $('.js-show-discount').val(randomDiscount);
+  });
+  
+  function generateRandomString(length) {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+    let result = '';
+    for (let i = 0; i < length; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length);
+      result += characters.charAt(randomIndex);
+    }
+    return result;
+  }
+  
+
 })(jQuery);

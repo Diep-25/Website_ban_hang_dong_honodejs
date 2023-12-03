@@ -67,6 +67,15 @@ const helpers = {
       }
       // label-info
       // label-primary
+    },
+
+    checkSelected : function(keyold, keyNew) {
+      if(keyold == keyNew) {
+        return "selected";
+      } else {
+        return "";
+      }
     }
+    
   };
 module.exports = helpers;

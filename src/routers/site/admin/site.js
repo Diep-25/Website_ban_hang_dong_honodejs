@@ -5,6 +5,7 @@ const productAdminController = require('../../../app/controllers/admin/ProductAd
 const siderAdminController = require('../../../app/controllers/admin/SliderAdminController');
 const userAdminController = require('../../../app/controllers/admin/UserAdminController');
 const oderAdminController = require('../../../app/controllers/admin/OderAdminController');
+const discountAdminController = require('../../../app/controllers/admin/DiscountAdminController');
 
 router.get('/', siteAdminController.index);
 
@@ -29,9 +30,9 @@ router.get('/user/edit/:id', userAdminController.edit);
 router.get('/order', oderAdminController.index);
 router.get('/order/detail/:id', oderAdminController.detail);
 router.get('/order/approve/:id', oderAdminController.approve);
-// router.post('/user/create', userAdminController.save);
-// router.get('/product/delete/:id', productAdminController.delete);
-// router.get('/user/edit/:id', userAdminController.edit);
-// router.post('/product/update/:id', productAdminController.update);
+
+router.get('/discount', discountAdminController.index);
+router.post('/discount/create', discountAdminController.save);
+router.get('/discount/update/:id', discountAdminController.edit);
 
 module.exports = router;

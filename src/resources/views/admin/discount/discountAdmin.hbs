@@ -1,0 +1,126 @@
+{{#if message}}
+      <div
+      class="alert alert-primary bg-primary text-light border-0 alert-dismissible fade show custom-alert"
+      role="alert">
+      {{ message }}
+      <button type="button" class="btn-close btn-close-white"
+        data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{{/if}}
+<main id="main" class="main">
+
+  <div class="pagetitle">
+    <h1>Danh sách mã giảm giá</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/admin/">Trang chủ</a></li>
+        <li class="breadcrumb-item active">Danh sách mã giảm giá</li>
+      </ol>
+    </nav>
+  </div>
+  <section class="section">
+    <div class="row">
+      <div class="col-lg-12">
+
+        <div class="card">
+          <div class="card-body">
+            <button type="button" class="btn btn-primary btn-custom-css"
+              data-bs-toggle="modal"
+              data-bs-target="#sliderModal">Thêm mã giảm giá</button>
+            <table class="table datatable">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Mã giảm giá</th>
+                  <th scope="col">Giảm</th>
+                  <th scope="col">Email</th>
+                  <th scope="col">Từ</th>
+                  <th scope="col">Đến</th>
+                  <th scope="col">Tình trạng</th>
+                  <th scope="col">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each discounts }}
+                <tr>
+                  <th scope="row">{{ this.id }}</th>
+                  <td>{{ this.code }}</td>
+                  <td>{{ this.discount }}%</td>
+                  <td>{{ this.user.dataValues.email }}</td>
+                  <td>{{ this.startDate }}</td>
+                  <td>{{ this.endDate }}</td>
+                  <td><p style="color:{{ this.color }};">{{ this.status }}</p></td>
+                  <td>
+                    <a href="/admin/discount/update/{{ this.id }}"><button type="button" class="btn btn-primary"><i class="bi bi-pencil me-1"></i></button></a>
+                    <a href="/admin/discount/delete/{{ this.id }}"><button type="button" class="btn btn-danger"><i class="bi bi-trash me-1"></i></button></a>
+                  </td>
+                </tr>
+                {{/each}}
+              </tbody>
+            </table>
+            <!-- End Table with stripped rows -->
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="modal fade" id="sliderModal" tabindex="-1">
+      <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Thêm mã giảm giá</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"
+              aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form action="/admin/discount/create" method="post"
+              class="row g-3 needs-validation" novalidate>
+
+              <div class="col-12">
+                <label for="inputDate" class="col-sm-2 col-form-label">Mã giảm giá</label>
+                <div class="input-group col-sm-12">
+                    <span class="input-group-text btn-primary btn js-render-discount" id="basic-addon1">Render mã</span>
+                    <input type="text" name="code"  class="form-control js-show-discount" aria-label="Username" aria-describedby="basic-addon1" required>
+                </div>
+              </div>
+              <div class="col-12">
+                <label for="inputDate" class="col-sm-2 col-form-label">% giảm</label>
+                <div class="input-group col-sm-12">
+                    <span class="input-group-text " id="basic-addon1">%</span>
+                    <input type="number" name="discount" class="form-control" aria-label="Username" aria-describedby="basic-addon1" required>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <label class="form-label">Email</label>
+                <select class="form-select" name="id_user" required>
+                  <option selected value="">---Chọn email---</option>
+                  {{#each users }}
+                  <option value="{{ this.id }}">{{ this.email }}</option>
+                  {{/each}}
+                </select>
+              </div>
+              <div class="col-md-12">
+                  <label for="inputDate" class="col-sm-2 col-form-label">Ngày bắt đầu</label>
+                  <div class="col-sm-12">
+                    <input name="startDate" type="date" class="form-control" required>
+                  </div>
+              </div>
+              <div class="col-md-12">
+                  <label for="inputDate" class="col-sm-2 col-form-label">Ngày hết hạn</label>
+                  <div class="col-sm-12">
+                    <input name="endDate" type="date" class="form-control" required>
+                  </div>
+              </div>
+              <div class="col-12">
+                <button class="btn btn-primary" type="submit">Thêm</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main><!-- End #main -->

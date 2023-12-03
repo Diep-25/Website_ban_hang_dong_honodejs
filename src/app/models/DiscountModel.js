@@ -5,6 +5,8 @@ const UserModel = require("./UserModel");
 const DetailOderModel = db.sequelize.define("discounts", {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     code: { type: DataTypes.STRING },
+    discount: { type: DataTypes.INTEGER},
+    status: { type: DataTypes.INTEGER, defaultValue: 1 },
     startDate: { type: DataTypes.DATE},
     endDate: { type: DataTypes.DATE},
     id_user: { type: DataTypes.INTEGER},

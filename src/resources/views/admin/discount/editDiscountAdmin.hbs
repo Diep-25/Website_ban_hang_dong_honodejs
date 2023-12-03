@@ -1,0 +1,69 @@
+<main id="main" class="main">
+
+  <div class="pagetitle">
+    <h1>Danh sách mã giảm giá</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/admin/">Trang chủ</a></li>
+        <li class="breadcrumb-item"><a href="/admin/slider">Mã giảm giá</a></li>
+        <li class="breadcrumb-item active">{{ discount.code }}</li>
+      </ol>
+    </nav>
+  </div>
+  <section class="section">
+    <div class="row">
+      <div class="col-lg-12">
+
+        <div class="card">
+          <div class="card-body">
+            <button type="button" class="btn btn-primary btn-custom-css">Quay lại</button>
+            <form action="/admin/discount/update" method="post"
+              class="row g-3 needs-validation" novalidate style="margin-top: 40px;">
+
+              <div class="col-12">
+                <label for="inputDate" class="col-sm-2 col-form-label">Mã giảm giá</label>
+                <div class="input-group col-sm-12">
+                    <span class="input-group-text btn-primary btn js-render-discount" id="basic-addon1">Render mã</span>
+                    <input type="text" name="code" value="{{ discount.code }}"  class="form-control js-show-discount" aria-label="Username" aria-describedby="basic-addon1" required>
+                </div>
+              </div>
+              <div class="col-12">
+                <label for="inputDate" class="col-sm-2 col-form-label">% giảm</label>
+                <div class="input-group col-sm-12">
+                    <span class="input-group-text" id="basic-addon1">%</span>
+                    <input type="number" name="discount" value="{{ discount.discount }}" class="form-control" aria-label="Username" aria-describedby="basic-addon1" required>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <label class="form-label">Email</label>
+                <select class="form-select" name="id_user" required>
+                  {{#each users }}
+                  <option {{ checkSelected ../discount.id_user this.id}} value="{{ this.id }}">{{ this.email }}</option>
+                  {{/each}}
+                </select>
+              </div>
+              <div class="col-md-12">
+                  <label for="inputDate" class="col-sm-2 col-form-label">Ngày bắt đầu</label>
+                  <div class="col-sm-12">
+                    <input name="startDate" value="{{ discount.startDate }}" type="date" class="form-control" required>
+                  </div>
+              </div>
+              <div class="col-md-12">
+                  <label for="inputDate" class="col-sm-2 col-form-label">Ngày hết hạn</label>
+                  <div class="col-sm-12">
+                    <input name="endDate" type="date" value="{{ discount.endDate }}" class="form-control" required>
+                  </div>
+              </div>
+              <div class="col-12">
+                <button class="btn btn-primary" type="submit">Cập nhật</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </section>
+
+</main><!-- End #main -->
