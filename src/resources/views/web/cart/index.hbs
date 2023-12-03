@@ -1,0 +1,97 @@
+<section class="page-header">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="content">
+					<h1 class="page-name">Giỏ hàng</h1>
+					<ol class="breadcrumb">
+						<li><a href="/">Trang chủ</a></li>
+						<li class="active">Giỏ hàng</li>
+					</ol>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<div class="page-wrapper">
+  <div class="cart shopping">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8 col-md-offset-2 custom-cart">
+          <div class="block">
+            {{#if oders}}
+            <div class="product-list">
+              <form method="post">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th class="">Tên</th>
+                      <th class="">Giá</th>
+                      <th class="">Số lượng</th>
+                      <th class="">Tổng</th>
+                      <th class="">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {{#each oders }}
+                    <tr class="">
+                      <td class="">
+                        <div class="product-info">
+                          <img width="80" src="/{{ this.image }}" alt="cart" />
+                          <a href="#!">{{ this.name }}</a>
+                        </div>
+                      </td>
+                      <td class="">{{convertPrice this.price }}</td>
+                      <td class="" style="text-align: center;">
+                        <div style="width: 120px;" class="product-quantity-slider">
+							<input style="height:34px;" onchange="changeQuantity({{ this.id }}, this.value)" id="product-quantity" data-id="{{ this.id }}" type="text" value="{{ this.quantity }}" min="1" name="quantity">
+						</div>
+                      </td>
+                      <td class="price-count-{{ this.id }}">{{multiply this.quantity this.price}}</td>
+                      <td class="">
+                        <a class="product-remove" href="/delete-cart/{{ this.id }}">Xóa</a>
+                      </td>
+                    </tr>
+                    {{/each}}
+                  </tbody>
+                </table>
+                <p style="text-align: right; margin-bottom: 30px;">Tổng đơn hàng: <span class="count_cart_js">{{convertPrice count_cart }}</span></p>
+                <div style="display: flex; justify-content: flex-end;">
+                  <div>
+                    <a href="/cart" class="btn btn-main pull-right">Cập nhật giỏ hàng</a>
+                  </div>
+                  {{#if user }}
+                  <div style="margin-left: 20px;">
+                    <a href="/checkout" class="btn btn-main pull-right">Thanh toán</a>
+                  </div>
+                  {{ else }}
+                  <div style="margin-left: 20px;">
+                    <a href="/login" class="btn btn-main pull-right">Đăng nhập</a>
+                  </div>
+                  {{/if}}
+                </div>
+                
+              </form>
+              
+            </div>
+            {{ else }}
+
+            <h2 style="text-align: center; margin-bottom: 30px;">Giỏ hàng trống!</h2>
+            <a href="/" class="btn btn-main pull-right">Quay lại trang chủ</a>
+
+            {{/if}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+    function changeQuantity(id, value) {
+        var request = $.ajax({
+            method: "GET",
+            url: "/change-cart/" + id + "/" + value,
+        });
+    }
+</script>

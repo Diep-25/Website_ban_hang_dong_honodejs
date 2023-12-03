@@ -1,0 +1,79 @@
+<main id="main" class="main">
+
+  <div class="pagetitle">
+    <h1>Danh sách slider</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/admin/">Trang chủ</a></li>
+        <li class="breadcrumb-item"><a href="/admin/slider">Slider</a></li>
+        <li class="breadcrumb-item active">{{ slider.name }}</li>
+      </ol>
+    </nav>
+  </div>
+  <section class="section">
+    <div class="row">
+      <div class="col-lg-12">
+
+        <div class="card">
+          <div class="card-body">
+            <button type="button" class="btn btn-primary btn-custom-css">Quay lại</button>
+            <form action="/admin/slider/edit/{{ slider.id }}" method="post"
+              enctype="multipart/form-data"
+              class="row g-3 needs-validation" novalidate style="margin-top: 40px;">
+              <div class="col-md-12">
+                <label for="validationCustom01" class="form-label">Tiêu đề</label>
+                <input type="text" name="name" class="form-control"
+                  id="validationCustom01" value="{{ slider.name }}" required>
+              </div>
+              <div class="col-md-12">
+                <label for="fileEdit" class="form-label">Ảnh</label>
+                <input class="form-control" name="image" type="file"
+                  id="fileEdit" >
+                {{!-- <img class="image-edit-slider change-image-js" src="{{ hostName }}/{{ slider.image }}" alt="{{ slider.name }}">   --}}
+              </div>
+              <div class="col-md-12">
+                <label for="validationCustom02" class="form-label">Url</label>
+                <input type="text" name="url" class="form-control"
+                  id="validationCustom02" value="{{ slider.url }}" required>
+              </div>
+              <div class="col-md-12">
+                <label class="form-label">Vùng hiển thị</label>
+                <select class="form-select" name="attribute">
+                  <option 
+                  {{#ifEquals slider.attribute 1}}
+                  selected
+                  {{/ifEquals}}
+                  value="1">Left</option>
+                  <option 
+                  {{#ifEquals slider.attribute 2}}
+                  selected
+                  {{/ifEquals}}
+                   value="2">Center</option>
+                  <option 
+                  {{#ifEquals slider.attribute 3}}
+                  selected
+                  {{/ifEquals}}
+                   value="3">Right</option>
+                </select>
+              </div>
+              <div class="col-md-12">
+                <label for="floatingTextarea" class="form-label">Chi tiết</label>
+                <textarea class="form-control" name="content"
+                  id="floatingTextarea" style="height: 100px;"
+                  required>{{ slider.content }}</textarea>
+              </div>
+              <div class="col-12">
+                <button class="btn btn-primary" type="submit">Cập nhật</button>
+              </div>
+            </form>
+            <!-- End Table with stripped rows -->
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </section>
+
+</main><!-- End #main -->

@@ -1,0 +1,158 @@
+{{!-- {{#if message}}
+      <div
+      class="alert alert-primary bg-primary text-light border-0 alert-dismissible fade show custom-alert"
+      role="alert">
+      {{ message }}
+      <button type="button" class="btn-close btn-close-white"
+        data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{{/if}} --}}
+<main id="main" class="main">
+
+  <div class="pagetitle">
+    <h1>Danh sách đơn hàng</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/admin/">Trang chủ</a></li>
+        <li class="breadcrumb-item active">Danh sách đơn hàng</li>
+      </ol>
+    </nav>
+  </div>
+  <section class="section">
+    <div class="row">
+      <div class="col-lg-12">
+
+        <div class="card">
+          <div class="card-body">
+            {{!-- <button type="button" class="btn btn-primary btn-custom-css"
+              data-bs-toggle="modal"
+              data-bs-target="#sliderModal">Đơn hàng đã duyệt</button> --}}
+            <table class="table datatable">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Mã đơn hàng</th>
+                  <th scope="col">Khách hàng</th>
+                  <th scope="col">Địa chỉ</th>
+                  <th scope="col">Email</th>
+                  <th scope="col">Số điện thoại</th>
+                  <th scope="col">Thời gian</th>
+                  <th scope="col">Trạng thái</th>
+                  <th scope="col">Phương thức thanh toán</th>
+                  <th scope="col">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each oders }}
+                <tr>
+                  <th scope="row">{{ this.id }}</th>
+                  <td><p style="color: red;">#{{ this.code }}</p></td>
+                  <td>{{ this.address.dataValues.name }} </td>
+                  <td>{{ this.address.dataValues.address}}</td>
+                  <td>{{ this.user.dataValues.email}}</td>
+                  <td>{{ this.address.dataValues.phone}}</td>
+                  <td>{{convertDate this.createdAt}}</td>
+                  <td><p style="color: {{ colorStartusOder this.status }};">{{ this.status }}</p></td>
+                  <td>{{ convertPayment this.payment }}</td>
+                  <td>
+                    <button type="button" class="btn btn-primary btn-detail-oder-js" id="{{ this.id }}" data-bs-toggle="modal"
+                      data-bs-target="#detailOder"><i class="bi bi-card-list me-1"></i></button>
+                    <a href="/admin/order/approve/{{ this.id }}"><button type="button" class="btn btn-success"><i class="bi bi-check me-1"></i></button></a>
+                  </td>
+                  {{/each}}
+                </tr>
+              </tbody>
+            </table>
+            
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    {{!-- <div class="modal fade" id="sliderModal" tabindex="-1">
+      <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Thêm slider</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"
+              aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form action="/admin/slider/create" method="post"
+              enctype="multipart/form-data"
+              class="row g-3 needs-validation" novalidate>
+              <div class="col-md-12">
+                <label for="validationCustom01" class="form-label">Tiêu đề</label>
+                <input type="text" name="name" class="form-control"
+                  id="validationCustom01" value required>
+              </div>
+              <div class="col-md-12">
+                <label for="formFile" class="form-label">Ảnh</label>
+                <input class="form-control" name="image" type="file"
+                  id="formFile" required>
+              </div>
+              <div class="col-md-12">
+                <label for="validationCustom02" class="form-label">Url</label>
+                <input type="text" name="url" class="form-control"
+                  id="validationCustom02" value required>
+              </div>
+              <div class="col-md-12">
+                <label class="form-label">Vùng hiển thị</label>
+                <select class="form-select" name="attribute">
+                  <option selected value="1">Left</option>
+                  <option value="2">Center</option>
+                  <option value="3">Right</option>
+                </select>
+              </div>
+              <div class="col-md-12">
+                <label for="floatingTextarea" class="form-label">Chi tiết</label>
+                <textarea class="form-control" name="content"
+                  id="floatingTextarea" style="height: 100px;"
+                  required></textarea>
+              </div>
+              <div class="col-12">
+                <button class="btn btn-primary" type="submit">Thêm</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div> --}}
+
+<!--  detail oder -->
+
+    <div class="modal fade" id="detailOder" tabindex="-1">
+      <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Chi tiết đơn hàng</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"
+              aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Mã đơn hàng</th>
+                    <th scope="col">Tên sản phẩm</th>
+                    <th scope="col">Số lượng</th>
+                    <th scope="col">Giá</th>
+                    <th scope="col">Thành tiền</th>
+                  </tr>
+                </thead>
+                <tbody class="body-table-oder-js">
+                </tbody>
+              </table>
+              <div style="text-align: end;" class="detail-count-oder-js">
+                
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+   
+  </section>
+
+</main>

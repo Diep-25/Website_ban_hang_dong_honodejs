@@ -1,0 +1,46 @@
+<section class="page-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="content">
+                    <h1 class="page-name">Chi tiết hồ sơ</h1>
+                    <ol class="breadcrumb">
+                        <li><a href="/">Trang chủ</a></li>
+                        <li class="active">Chi tiết hồ sơ</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="user-dashboard page-wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="list-inline dashboard-menu text-center">
+                    <li><a class="active" href="#">Chi tiết hồ sơ</a></li>
+                    <li><a href="/order">Đơn hàng</a></li>
+                    <li><a href="/address">Địa chỉ</a></li>
+                </ul>
+                <div class="dashboard-wrapper dashboard-user-profile">
+                    <div class="media">
+                        <div class="pull-left text-center" href="#!">
+                            <img class="media-object user-img"
+                                src="/web/images/avater.jpg" alt="{{ user.lastname }} {{ user.firstname }}">
+                            <a href="#x" class="btn btn-transparent mt-20">Thay đổi ảnh</a>
+                        </div>
+                        <div class="media-body">
+                            <ul class="user-profile-list">
+                                <li><span>Họ & Tên:</span>{{ user.lastname }} {{ user.firstname }}</li>
+                                <li><span>Email:</span>{{ user.email }}</li>
+                                <li><span>Tình trạng:</span>Hoạt động</li>
+                                <li><span>Quyền:</span>{{ user.id_role }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

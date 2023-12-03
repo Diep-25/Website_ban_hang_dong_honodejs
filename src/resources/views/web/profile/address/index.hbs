@@ -1,0 +1,61 @@
+<section class="page-header">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="content">
+					<h1 class="page-name">Địa chỉ</h1>
+					<ol class="breadcrumb">
+						<li><a href="index.html">Trang chủ</a></li>
+						<li class="active">Địa chỉ</li>
+					</ol>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<section class="user-dashboard page-wrapper">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <ul class="list-inline dashboard-menu text-center">
+          <li><a href="/profile-details">Chi tiết hồ sơ</a></li>
+          <li><a href="/order">Đơn hàng</a></li>
+          <li><a class="active" href="#">Địa chỉ</a></li>
+        </ul>
+        <div class="dashboard-wrapper user-dashboard">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Họ & Tên</th>
+                  <th class="col-md-2 col-sm-3">Số điện thoại</th>
+                  <th>Địa chỉ</th>
+                  <th>Thành phố</th>
+                  <th>Mã Zip</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each address }}
+                <tr>
+                  <td>{{ this.name }}</td>
+                  <td>{{ this.phone }}</td>
+                  <td>{{ this.address }}</td>
+                  <td>{{ this.city }}</td>
+                  <td>{{ this.zip_code }}</td>
+                  <td>
+                    <div class="btn-group" role="group">
+                      <button type="button" class="btn btn-default"><i class="tf-pencil2" aria-hidden="true"></i></button>
+                      <button type="button" class="btn btn-default"><i class="tf-ion-close" aria-hidden="true"></i></button>
+                    </div>
+                  </td>
+                </tr>
+                {{/each}}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

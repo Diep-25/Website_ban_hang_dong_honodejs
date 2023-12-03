@@ -1,0 +1,185 @@
+<section class="page-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="content">
+                    <h1 class="page-name">Thanh toán</h1>
+                    <ol class="breadcrumb">
+                        <li><a href="/">Trang chủ</a></li>
+                        <li class="active">Thanh toán</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="page-wrapper">
+    <div class="checkout shopping">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="block billing-details">
+                        <h4 class="widget-title">Địa chỉ giao hàng</h4>
+                        <form class="checkout-form" method="post" action="/updateAddress/{{ idUser }}">
+                        <input type="hidden" name="id" value="{{ address.id }}" />
+                            <div class="form-group">
+                                <label for="full_name">Họ & Tên</label>
+                                <input type="text" name="name" value="{{ address.name }}" class="form-control"
+                                    id="full_name" required placeholder>
+                            </div>
+                            <div class="form-group">
+                                <label for="user_address">Địa chỉ</label>
+                                <input type="text" name="address" value="{{ address.address }}" class="form-control"
+                                    id="user_address" required placeholder>
+                            </div>
+                            <div class="form-group">
+                                <label for="user_phone">Số điện thoại</label>
+                                <input type="number" name="phone" value="{{ address.phone }}" class="form-control"
+                                    id="user_address" required placeholder>
+                            </div>
+                            <div class="checkout-country-code clearfix">
+                                <div class="form-group">
+                                    <label for="user_post_code">Zip Code</label>
+                                    <input type="number" required class="form-control"
+                                        id="user_post_code" name="zipcode" value="{{ address.zip_code }}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="user_city">Thành phố</label>
+                                    <input type="text" required class="form-control"
+                                        id="user_city" name="city" value="{{ address.city }}">
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-main mt-20">Cập nhật địa chỉ</button>
+
+                            <div class="">
+                                <label for="user_country">Phương thức thanh toán</label>
+                                <div class="custom-checkout-payment">
+                                    <input checked onchange="changePayment(this.value)" type="radio" name="payment" value="1"
+                                        class>
+                                    <label for="user_country">Thanh toán khi
+                                        nhận hàng</label>
+                                </div>
+                                <div class="custom-checkout-payment">
+                                    <input onchange="changePayment(this.value)" type="radio" name="payment" value="2"
+                                        class>
+                                    <label for="user_country">Thanh toán QR
+                                        Zalopay</label>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+
+
+                    <div class="block custom-zalopay-js" style="display: none;">
+                        <h4 class="widget-title">Payment Method</h4>
+                        <p>Credit Cart Details (Secure payment)</p>
+                        <div class="checkout-product-details">
+                            <div class="payment">
+                                <div class="card-details">
+                                    <form class="checkout-form">
+                                        <div class="form-group">
+                                            <label for="card-number">Card Number
+                                                <span class="required">*</span></label>
+                                            <input id="card-number"
+                                                class="form-control" type="tel"
+                                                placeholder="•••• •••• •••• ••••">
+                                        </div>
+                                        <div
+                                            class="form-group half-width padding-right">
+                                            <label for="card-expiry">Expiry
+                                                (MM/YY) <span class="required">*</span></label>
+                                            <input id="card-expiry"
+                                                class="form-control" type="tel"
+                                                placeholder="MM / YY">
+                                        </div>
+                                        <div
+                                            class="form-group half-width padding-left">
+                                            <label for="card-cvc">Card Code
+                                                <span class="required">*</span></label>
+                                            <input id="card-cvc"
+                                                class="form-control" type="tel"
+                                                maxlength="4" placeholder="CVC">
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="/confirmation?payment=1" class="btn btn-main mt-20">Thanh toán ngay</a>
+                </div>
+                <div class="col-md-4">
+                    <div class="product-checkout-details">
+                        <div class="block">
+                            <h4 class="widget-title">Chi tiết đơn hàng</h4>
+                            {{#each oders }}
+                            <div class="media product-card">
+                                <a class="pull-left" href="/">
+                                    <img class="media-object"
+                                        src="/{{ this.image }}"
+                                        alt="Image" />
+                                </a>
+                                <div class="media-body">
+                                    <h4 class="media-heading"><a
+                                            href="">{{ this.name }}</a></h4>
+                                    <p class="price">{{ this.quantity }} x {{ convertPrice this.price  }}</p>
+                                </div>
+                            </div>
+                            {{/each}}
+                            <div class="discount-code">
+                                <p>Mã giảm giá ? <a data-toggle="modal"
+                                        data-target="#coupon-modal" href="#!">Áp dụng</a></p>
+                            </div>
+                            <ul class="summary-prices">
+                                <li>
+                                    <span>Tổng phụ:</span>
+                                    <span class="price">{{convertPrice count_cart }}</span>
+                                </li>
+                                <li>
+                                    <span>Phí ship:</span>
+                                    <span>Free</span>
+                                </li>
+                            </ul>
+                            <div class="summary-total">
+                                <span>Total</span>
+                                <span>{{convertPrice count_cart }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="coupon-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <input class="form-control" type="text"
+                            placeholder="Enter Coupon Code">
+                    </div>
+                    <button type="submit" class="btn btn-main">Áp dụng</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+
+    function changePayment(value) {
+        var zalopayDiv = document.getElementsByClassName("custom-zalopay-js")[0];
+        if (value == "1") {
+            zalopayDiv.style.display = 'none'; 
+        }
+        if (value == "2") {
+            zalopayDiv.style.display = 'block';
+        }
+    }
+
+</script>
