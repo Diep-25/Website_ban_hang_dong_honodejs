@@ -1,0 +1,63 @@
+<section class="page-header">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="content">
+					<h1 class="page-name">Mã giảm giá</h1>
+					<ol class="breadcrumb">
+						<li><a href="/">Trang chủ</a></li>
+						<li class="active">Mã giảm giá</li>
+					</ol>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<section class="user-dashboard page-wrapper">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <ul class="list-inline dashboard-menu text-center">
+          <li><a href="/profile-details">Chi tiết hồ sơ</a></li>
+          <li><a href="/order">Đơn hàng</a></li>
+          <li><a href="/address">Địa chỉ</a></li>
+          <li><a class="active" href="#">Mã giảm giá</a></li>
+        </ul>
+        <div class="dashboard-wrapper user-dashboard">
+          <div class="table-responsive">
+            {{#if discounts }}
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Mã giảm giá</th>
+                  <th class="col-md-2 col-sm-3">Giảm</th>
+                  <th>Email</th>
+                  <th>Thời gian bắt đầu</th>
+                  <th>Thời gian hết hạn</th>
+                  <th>Tình trạng</th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each discounts }}
+                <tr>
+                  <td><p style="font-weight: bold;">{{ this.code }}</p></td>
+                  <td>{{ this.discount }}%</td>
+                  <td>{{ ../user.email }}</td>
+                  <td>{{ this.startDate }}</td>
+                  <td>{{ this.endDate }}</td>
+                  <td><span class="label {{ this.color }}">{{ this.status }}</span></td>
+                </tr>
+                {{/each}}
+
+              </tbody>
+            </table>
+
+            {{else}}
+            <p style="text-align: center;">Không có mã giảm giá nào dành cho bạn.</p>
+            {{/if }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -3,10 +3,12 @@ const sliderModel = require('../models/SliderModel');
 const productModel = require('../models/ProductModel');
 const addressModel = require('../models/AddressModel');
 const oderModel = require('../models/OderModel');
+const discountModel = require('../models/DiscountModel');
+const roleModel = require('../models/RoleModel');
 const { Op } = require('sequelize');
 const detailOderModel = require('../models/DetailOderModel');
 const bcrypt = require("bcrypt")
-const { mutipleConvertToObject } = require('../../util/convert');
+const { mutipleConvertToObject, formatDate } = require('../../util/convert');
 const mail = require('../../util/sendMail');
 const { getOder } = require('../../util/oders');
 const fs = require('fs');
@@ -2058,15 +2060,24 @@ class SiteController {
 
     }
 
-    profileDetails(req, res) {
+    async profileDetails(req, res) {
 
         var checkLogin = false;
         if (req.cookies.login) {
             checkLogin = req.cookies.login;
         }
+        const user = await userModel.findOne({
+          include: [
+            { model: roleModel },
+          ],
+          where: {
+            id: checkLogin.id
+          }
+        });
+
         res.render('profile/index', {
             title: 'Thông tin người dùng',
-            user: checkLogin
+            user: user.dataValues
         });
     }
 
@@ -2106,6 +2117,7 @@ class SiteController {
     }
 
     async address(req, res) {
+
         var checkLogin = false;
         var address = [];
         if (req.cookies.login) {
@@ -2117,18 +2129,48 @@ class SiteController {
             address = mutipleConvertToObject(addressArray);
         }
 
+        // oder
+        const oders = getOder(req);
+        var count_cart = 0;
+        if (oders) {
+            oders.forEach(oder => {
+                var count = oder.quantity * oder.price;
+                count_cart += count;
+            });
+        }
 
         res.render('profile/address/index', {
             title: 'Địa chỉ',
             user: checkLogin,
-            address: address
+            address: address,
+            oders: oders,
+            count_cart: count_cart
         });
     }
 
     contact(req, res) {
-        res.render('contact/index', {
-            title: 'Liên hệ'
-        });
+
+      var checkLogin = false;
+      if (req.cookies.login) {
+          checkLogin = req.cookies.login;
+      }
+
+      // oder
+      const oders = getOder(req);
+      var count_cart = 0;
+      if (oders) {
+          oders.forEach(oder => {
+              var count = oder.quantity * oder.price;
+              count_cart += count;
+          });
+      }
+      res.render('contact/index', {
+          title: 'Liên hệ',
+          oders: oders,
+          count_cart: count_cart,
+          user: checkLogin
+
+      });
     }
 
     async updateAddress(req, res) {
@@ -2222,6 +2264,53 @@ class SiteController {
         })
       }
 
+    }
+
+    async discount(req, res) {
+
+      var checkLogin = false;
+      if (req.cookies.login) {
+          checkLogin = req.cookies.login;
+      }
+
+      const discountData = await discountModel.findAll({
+        attributes: ['id', 'code', 'discount', 'startDate', 'endDate', 'id_user', 'status'],
+        where: { id_user: checkLogin.id}
+      });
+
+      const discounts = mutipleConvertToObject(discountData);
+      var arrayData = [];
+      discounts.forEach(data => {
+          data.startDate = formatDate(data.startDate);
+          data.endDate = formatDate(data.endDate);
+          if(data.status == 1) {
+              data.status = "Chưa sử dụng";
+              data.color = "label-success";
+          } else {
+              data.status = "Đã sử dụng";
+              data.color = "label-danger";
+          }
+          arrayData.push(data);
+      });
+
+      // oder
+      const oders = getOder(req);
+      var count_cart = 0;
+      if (oders) {
+          oders.forEach(oder => {
+              var count = oder.quantity * oder.price;
+              count_cart += count;
+          });
+      }
+
+      res.render('profile/discount/index', {
+        title: 'Mã giảm giá',
+        user: checkLogin,
+        discounts: arrayData,
+        oders: oders,
+        count_cart: count_cart
+      });
+      
     }
 
 }

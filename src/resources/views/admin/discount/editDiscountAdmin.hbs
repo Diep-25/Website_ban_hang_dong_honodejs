@@ -17,7 +17,7 @@
         <div class="card">
           <div class="card-body">
             <button type="button" class="btn btn-primary btn-custom-css">Quay lại</button>
-            <form action="/admin/discount/update" method="post"
+            <form action="/admin/discount/update/{{ discount.id }}" method="post"
               class="row g-3 needs-validation" novalidate style="margin-top: 40px;">
 
               <div class="col-12">
@@ -31,7 +31,8 @@
                 <label for="inputDate" class="col-sm-2 col-form-label">% giảm</label>
                 <div class="input-group col-sm-12">
                     <span class="input-group-text" id="basic-addon1">%</span>
-                    <input type="number" name="discount" value="{{ discount.discount }}" class="form-control" aria-label="Username" aria-describedby="basic-addon1" required>
+                    <input type="number" name="discount" value="{{ discount.discount }}" class="form-control js-validate-discount" min="1" max="99" aria-label="Username" aria-describedby="basic-addon1" required>
+                    <div class="invalid-feedback js-message"></div>
                 </div>
               </div>
               <div class="col-md-12">

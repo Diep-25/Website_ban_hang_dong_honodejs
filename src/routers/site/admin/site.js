@@ -33,6 +33,8 @@ router.get('/order/approve/:id', oderAdminController.approve);
 
 router.get('/discount', discountAdminController.index);
 router.post('/discount/create', discountAdminController.save);
-router.get('/discount/update/:id', discountAdminController.edit);
+router.get('/discount/edit/:id', discountAdminController.edit);
+router.post('/discount/update/:id', discountAdminController.update);
+router.get('/discount/delete/:id', discountAdminController.delete);
 
 module.exports = router;

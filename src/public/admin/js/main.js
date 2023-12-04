@@ -372,6 +372,23 @@
     }
     return result;
   }
+
+  $(document).ready(function() {
+    $('.js-validate-discount').on('input', function() {
+      const inputValue = $(this).val();
+      const minValue = 0;
+      const maxValue = 99;
+
+      if (inputValue < minValue || inputValue > maxValue) {
+        console.log(inputValue > maxValue);
+        $('.js-message').text(`Giá trị phải nằm trong khoảng từ ${minValue} đến ${maxValue}`);
+        $('.js-message').show();
+      } else {
+        $('.js-message').text('');
+        $('.js-message').hide();
+      }
+    });
+  });
   
 
 })(jQuery);

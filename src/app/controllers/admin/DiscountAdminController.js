@@ -43,17 +43,13 @@ class DiscountAdminController {
 
     async save(req, res) {
 
-        var checkLogin = false;
-        if (req.cookies.login) {
-            checkLogin = req.cookies.login;
-        }
         discountModel.create({
             code: req.body.code,
             discount: req.body.discount,
             startDate: req.body.startDate,
             endDate: req.body.endDate,
-            id_user: checkLogin.id,
-        }).then((data) => {
+            id_user: req.body.id_user,
+        }).then(() => {
             res.redirect('/admin/discount');
         });
     }
@@ -79,6 +75,35 @@ class DiscountAdminController {
         });
 
         
+    }
+
+    update(req, res) {
+
+        discountModel.update({
+            code: req.body.code,
+            discount: req.body.discount,
+            startDate: req.body.startDate,
+            endDate: req.body.endDate,
+            id_user: req.body.id_user,
+        },
+        {
+            where: { id: req.params.id }
+        }
+        ).then(() => {
+            res.redirect('/admin/discount');
+        }).catch(() => {
+            res.redirect('/admin/discount/edit/' + req.params.id);
+        });
+    }
+
+    delete(req, res) {
+        discountModel.destroy({
+            where: { id: req.params.id},
+        }).then(() => {
+            res.redirect('/admin/discount');
+        }).catch(() => {
+            res.redirect('/admin/discount');
+        })
     }
 
 }

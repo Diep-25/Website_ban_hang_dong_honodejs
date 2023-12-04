@@ -22,6 +22,7 @@
                     <li><a class="active" href="#">Chi tiết hồ sơ</a></li>
                     <li><a href="/order">Đơn hàng</a></li>
                     <li><a href="/address">Địa chỉ</a></li>
+                    <li><a href="/discount">Mã giảm giá</a></li>
                 </ul>
                 <div class="dashboard-wrapper dashboard-user-profile">
                     <div class="media">
@@ -35,7 +36,7 @@
                                 <li><span>Họ & Tên:</span>{{ user.lastname }} {{ user.firstname }}</li>
                                 <li><span>Email:</span>{{ user.email }}</li>
                                 <li><span>Tình trạng:</span>Hoạt động</li>
-                                <li><span>Quyền:</span>{{ user.id_role }}</li>
+                                <li><span>Quyền:</span>{{ user.role.dataValues.role }}</li>
                             </ul>
                         </div>
                     </div>

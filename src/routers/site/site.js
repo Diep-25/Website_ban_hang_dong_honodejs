@@ -33,6 +33,8 @@ router.get('/search', siteController.search);
 
 router.get('/address', siteController.address);
 
+router.get('/discount', siteController.discount);
+
 router.get('/profile-details', siteController.profileDetails);
 
 router.get('/change-cart/:id/:quantity', siteController.changeCart);
