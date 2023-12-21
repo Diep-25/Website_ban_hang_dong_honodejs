@@ -25,7 +25,7 @@ router.get('/user', userAdminController.index);
 router.post('/user/create', userAdminController.save);
 // router.get('/product/delete/:id', productAdminController.delete);
 router.get('/user/edit/:id', userAdminController.edit);
-// router.post('/product/update/:id', productAdminController.update);
+router.post('/user/update/:id', userAdminController.update);
 
 router.get('/order', oderAdminController.index);
 router.get('/order/detail/:id', oderAdminController.detail);

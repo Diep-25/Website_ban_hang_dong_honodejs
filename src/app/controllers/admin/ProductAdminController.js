@@ -1,5 +1,6 @@
 
 const productModel = require('../../models/ProductModel');
+const productImageModel = require('../../models/ProductImageModel');
 const path = require('path');
 const fs = require('fs');
 const { mutipleConvertToObject } = require('../../../util/convert');
@@ -10,30 +11,54 @@ class ProductAdminController {
         const fullUrl = req.protocol + '://' + req.get('host');
 
         const productData = await productModel.findAll({
-            attributes: ['id', 'name', 'image', 'price', 'detail', 'quantity', 'status']
-        })
+            attributes: ['id', 'name', 'price', 'detail', 'quantity', 'status'],
+            order: [
+                ['id', 'DESC']
+            ]
+        });
+        
         const products = mutipleConvertToObject(productData);
+        var arrayProduct = [];
+        products.forEach(data => {
+            
+            if (data.status == 1) {
+                data.status = 'Sale';
+            }
+            if (data.status == 2) {
+                data.status = 'Hot';
+            }
+            if (data.status == 0) {
+                data.status = '---';
+            }
+            
+            arrayProduct.push(data);
+        });
         res.render('product/allProduct', {
             title: 'Sản phẩm',
             hostName: fullUrl,
-            products: products,
+            products: arrayProduct,
         });
     }
     async save(req, res) {
 
-        const { image } = req.files;
-        image.mv(path.join(__dirname, '../../../', 'public', 'web', 'images', 'products', image.name));
-        const imagePatch = path.join('web', 'images', 'products', image.name);
-        // req.bodyd
         productModel.create({
             name: req.body.name,
-            image: imagePatch.replaceAll(/\\/g, "/"),
             price: req.body.price,
             detail: req.body.detail,
             quantity: req.body.quantity,
             status: req.body.status,
             id_user: 1,
         }).then((data) => {
+            const { image } = req.files;
+            image.forEach(imageFor => {
+                imageFor.mv(path.join(__dirname, '../../../', 'public', 'web', 'images', 'products', imageFor.name));
+                const imagePatch = path.join('web', 'images', 'products', imageFor.name);
+                productImageModel.create({
+                    url: imagePatch.replaceAll(/\\/g, "/"),
+                    name: data.name,
+                    id_product: data.id
+                })
+            });
             res.redirect('/admin/product/all');
         });
     }
@@ -47,7 +72,7 @@ class ProductAdminController {
     async edit(req, res) {
         const fullUrl = req.protocol + '://' + req.get('host');
         productModel.findOne({
-            attributes: ['id', 'name', 'image', 'price', 'detail', 'quantity', 'status'],
+            attributes: ['id', 'name', 'price', 'detail', 'quantity', 'status'],
             where: { id: req.params.id }
         })
             .then(product => {

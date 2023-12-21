@@ -66,12 +66,12 @@
 	<div class="container">
 		<div class="row">
 			<div class="title text-center">
-				<h2>Sản phẩm</h2>
+				<h2>Sản phẩm nổi bật</h2>
 			</div>
 		</div>
 		<div class="row">
 			{{#each products}}
-			<div class="col-md-4">
+			<div class="col-md-3">
 				<div class="product-item">
 					<div class="product-thumb">
 						{{#ifEquals this.status 1}}
@@ -80,7 +80,7 @@
 						{{#ifEquals this.status 2}}
 						<span class="bage">Hot</span>
 						{{/ifEquals }}
-						<img class="img-responsive" src="{{ hostName }}/{{ this.image  }}" alt="product-img" />
+						<img class="img-responsive" src="{{ hostName }}/{{ this.images.0.dataValues.url  }}" alt="product-img" />
 						<div class="preview-meta">
 							<ul>
 								<li>
@@ -95,7 +95,7 @@
                       	</div>
 					</div>
 					<div class="product-content">
-						<h4><a href="">{{ this.name }}</a></h4>
+						<h4><a href="/product/detail/{{ this.id }}">{{ this.name }}</a></h4>
 						<p class="price">{{convertPrice this.price }}</p>
 					</div>
 				</div>

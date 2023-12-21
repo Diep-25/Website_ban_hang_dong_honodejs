@@ -117,7 +117,7 @@
                             <div class="media product-card">
                                 <a class="pull-left" href="/">
                                     <img class="media-object"
-                                        src="/{{ this.image }}"
+                                        src="/{{ this.url }}"
                                         alt="Image" />
                                 </a>
                                 <div class="media-body">
@@ -137,13 +137,13 @@
                                     <span class="price">{{convertPrice count_cart }}</span>
                                 </li>
                                 <li>
-                                    <span>Phí ship:</span>
-                                    <span>Free</span>
+                                    <span>Giảm giá:</span>
+                                    <span>{{ discount }}%</span>
                                 </li>
                             </ul>
                             <div class="summary-total">
                                 <span>Total</span>
-                                <span>{{convertPrice count_cart }}</span>
+                                <span>{{calculateDiscount count_cart discount }}</span>
                             </div>
                         </div>
                     </div>
@@ -157,10 +157,10 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-body">
-                <form>
+                <form action="/product/discount" method="get">
                     <div class="form-group">
-                        <input class="form-control" type="text"
-                            placeholder="Enter Coupon Code">
+                        <input class="form-control" type="text" name="code"
+                            placeholder="Nhập mã giảm giá...">
                     </div>
                     <button type="submit" class="btn btn-main">Áp dụng</button>
                 </form>

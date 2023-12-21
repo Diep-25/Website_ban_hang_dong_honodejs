@@ -18,11 +18,22 @@ class UserAdminController {
         const fullUrl = req.protocol + '://' + req.get('host');
 
         const users = mutipleConvertToObject(userData);
+        var arrayUser = [];
+        users.forEach(data => {
+            
+            if (data.status == 1) {
+                data.status = 'Hoạt động';
+            }
+            if (data.status == 0) {
+                data.status = 'Đã khóa';
+            }
+            arrayUser.push(data);
+        });
 
         res.render('user/allUser', {
             title: 'Người dùng',
             hostName: fullUrl,
-            users: users,
+            users: arrayUser,
             message: req.flash('create')
         });
     }
@@ -32,8 +43,12 @@ class UserAdminController {
             firstname: req.body.firstname,
             lastname: req.body.lastname,
             email: req.body.email,
-            status: req.body.status,
             id_role: req.body.id_role
+        }
+        if (req.body.status == 'on') {
+            data.status = 1;
+        } else {
+            data.status = 0;
         }
         if (req.files) {
             const { image } = req.files;
@@ -69,39 +84,47 @@ class UserAdminController {
 
     }
 
-    // async update(req, res) {
-    //     var data = {
-    //         name: req.body.name,
-    //         content: req.body.content,
-    //         url: req.body.url,
-    //         attribute: req.body.attribute,
-    //         status: 1,
-    //         id_user: 1,
-    //     }
-
-    //     const slider = await sliderModel.findOne({
-    //         attributes: ['id', 'image'],
-    //         where: { id: req.params.id }
-    //     })
-    //     var imagePatch = '';
-    //     if (req.files) {
-    //         var filePath = path.join(__dirname, '../../../', 'public', slider.dataValues.image);
-    //         const existsFile = fs.existsSync(filePath)
-    //         if (existsFile) {
-    //             fs.unlinkSync(filePath);
-    //         }
-    //         const { image } = req.files;
-    //         image.mv(path.join(__dirname, '../../../', 'public', 'web', 'images', 'slider', image.name));
-    //         imagePatch = path.join('web', 'images', 'slider', image.name);
-    //         data.image = imagePatch.replaceAll(/\\/g, "/");
-    //     }
-    //     sliderModel.update(data, {
-    //         where: { id: req.params.id }
-    //     }).then(slider => {
-    //         res.redirect('/admin/slider');
-    //     })
-    //     .catch(err => next(err))
-    // }
+    async update(req, res) {
+        const data = {
+            firstname: req.body.firstname,
+            lastname: req.body.lastname,
+            email: req.body.email,
+            id_role: req.body.id_role
+        }
+        if (req.body.status == 'on') {
+            data.status = 1;
+        } else {
+            data.status = 0;
+        }
+        const user = await userModel.findOne({
+            attributes: ['id', 'image', 'password'],
+            where: { id: req.params.id }
+        })
+        if (req.body.password) {
+            bcrypt.hash(req.body.password, 10, (err, hash) => {
+                data.password = hash;
+            })
+        } else {
+            data.password = user.dataValues.password;
+        }
+        if (req.files) {
+            var filePath = path.join(__dirname, '../../../', 'public', 'web', 'images', 'avatar', user.dataValues.image);
+            const existsFile = fs.existsSync(filePath)
+            if (existsFile) {
+                fs.unlinkSync(filePath);
+            }
+            const { image } = req.files;
+            image.mv(path.join(__dirname, '../../../', 'public', 'web', 'images', 'avatar', image.name));
+            const imagePatch = path.join('web', 'images', 'avatar', image.name);
+            data.image = imagePatch.replaceAll(/\\/g, "/");
+        }
+        userModel.update(data, {
+            where: { id: req.params.id }
+        }).then(() => {
+            res.redirect('/admin/user');
+        })
+        .catch(err => next(err))
+    }
 
     // delete(req, res) {
     //     sliderModel.destroy({

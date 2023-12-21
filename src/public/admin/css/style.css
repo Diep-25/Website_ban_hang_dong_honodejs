@@ -1259,3 +1259,33 @@ h6 {
   padding: 7px!important;
   border: 1px solid #dee2e6!important;
 }
+.change-file-muti {
+  position: relative;
+}
+.change-file-muti .btn-delete-all {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+.imagePreview {
+  position: relative;
+  padding: 5px;
+}
+.imagePreview .deleteButton {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: rgb(248, 27, 27);
+  border: none;
+  color: #ffffff;
+  border-radius: 0 5px 0 5px;
+}
+.imagePreview img {
+  width: 90px;
+  border: 1px solid #b3b3b3;
+  border-radius: 5px;
+}
+#imagePreviewContainer {
+  display: flex;
+  flex-wrap: wrap;
+}

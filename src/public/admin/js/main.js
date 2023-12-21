@@ -328,7 +328,7 @@
     $.ajax('/admin/order/detail/' + $(this).attr('id'), {
       type: 'GET',
       success: function (data, status, xhr) {
-        console.log(data);
+
         var body = '';
         var countOder = 0;
         for (let index = 0; index < data.length; index++) {
@@ -339,7 +339,7 @@
           price = price.toLocaleString('it-IT', {style : 'currency', currency : 'VND'});
 
           body += '<tr class="table-success">'+
-            '<th>'+ data[index].oder.code +'</th>'+
+            '<th>#'+ data[index].oder.code +'</th>'+
             '<td>'+ data[index].product.name +'</td>'+
             '<td>'+ data[index].quantity +'</td>'+
             '<td>'+ price +'</td>'+
@@ -350,7 +350,7 @@
         var discount = 0;
         var detail = '<p style="font-weight: bold;">Thành tiền: '+ countOder +'</p>'+
         '<p style="font-weight: bold;">Giảm: '+ discount +'</p>'+
-        '<p style="font-weight: bold;">Tổng tiền: 44444444</p>';
+        '<p style="font-weight: bold;">Tổng tiền: '+ countOder +'</p>';
         $('.detail-count-oder-js').html(detail);
         $('.body-table-oder-js').html(body);
       },
@@ -388,6 +388,30 @@
         $('.js-message').hide();
       }
     });
+  });
+
+  $("#formFile").on("change", function() {
+    let container = $("#imagePreviewContainer").empty();
+    $("#deleteButton").toggle(!!this.files.length);
+
+    $.each(this.files, function(_, file) {
+        let reader = new FileReader();
+        reader.onload = function(e) {
+            let preview = $("<div class='imagePreview'></div>").appendTo(container);
+            $("<img>").attr("src", e.target.result).appendTo(preview);
+            $("<button type='button' class='deleteButton'><i class='bi bi-trash me-1'></i></button>").on("click", function() {
+                $(this).parent().remove();
+                $("#deleteButton").toggle(!!$("#formFile")[0].files.length);
+            }).appendTo(preview);
+        };
+        reader.readAsDataURL(file);
+    });
+  });
+
+  $("#deleteButton").on("click", function() {
+      $("#formFile").val(null);
+      $("#imagePreviewContainer").empty();
+      $(this).hide();
   });
   
 

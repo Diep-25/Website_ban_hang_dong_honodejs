@@ -10,4 +10,6 @@ router.get('/detail/:id', productController.detail);
 
 router.get('/modal/:id', productController.modal);
 
+router.get('/discount', productController.addDiscount);
+
 module.exports = router;

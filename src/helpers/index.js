@@ -75,6 +75,18 @@ const helpers = {
       } else {
         return "";
       }
+    },
+    activeImage: function (id) {
+      if (id == 0) {
+        return "active";
+      } else {
+        return "";
+      }
+    },
+    calculateDiscount: function(price , discount) {
+      const count =  (discount / 100) * price;
+      price = price - count;
+      return price.toLocaleString('it-IT', {style : 'currency', currency : 'VND'});
     }
     
   };

@@ -19,7 +19,7 @@ class UserAdminController {
                 { model: addressModel },
                 { model: userModel },
               ],
-            attributes: ['id', 'code', 'payment', 'status', 'id_user', 'id_address']
+            attributes: ['id', 'code', 'payment', 'status', 'id_user', 'id_address', 'createdAt']
         });
         
         const oders = mutipleConvertToObject(orderData);

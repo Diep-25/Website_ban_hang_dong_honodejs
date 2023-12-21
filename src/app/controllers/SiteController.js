@@ -4,6 +4,7 @@ const productModel = require('../models/ProductModel');
 const addressModel = require('../models/AddressModel');
 const oderModel = require('../models/OderModel');
 const discountModel = require('../models/DiscountModel');
+const productImageModel = require('../models/ProductImageModel');
 const roleModel = require('../models/RoleModel');
 const { Op } = require('sequelize');
 const detailOderModel = require('../models/DetailOderModel');
@@ -21,10 +22,23 @@ class SiteController {
 
 
         const productData = await productModel.findAll({
-            attributes: ['id', 'name', 'image', 'price', 'detail', 'quantity', 'status']
+            attributes: ['id', 'name', 'price', 'detail', 'quantity', 'status'],
+            where: { 
+              status: {
+                [Op.ne]: 0
+              }
+            },
+            order: [
+              ['id', 'DESC']
+            ],
+            include: [
+              { model: productImageModel,
+                  as: 'images'
+              },
+            ],
+            limit: 8
         })
         const products = mutipleConvertToObject(productData);
-
         const sliderData = await sliderModel.findAll({
             attributes: ['name', 'content', 'url', 'image', 'attribute']
         });
@@ -54,10 +68,20 @@ class SiteController {
         // oder
         const oders = getOder(req);
         var count_cart = 0;
+        var orderNew = [];
         if (oders) {
             oders.forEach(oder => {
                 var count = oder.quantity * oder.price;
                 count_cart += count;
+                productImageModel.findOne({
+                  attributes: ['id', 'url', 'name'],
+                  where: { 
+                    id_product: oder.id
+                  }
+                }).then((image) => {
+                  oder.url = image.url;
+                  orderNew.push(oder);
+                })
             });
         }
 
@@ -67,7 +91,7 @@ class SiteController {
             sliders: sliders,
             products: products,
             user: checkLogin,
-            oders: oders,
+            oders: orderNew,
             count_cart: count_cart
         })
     }
@@ -217,9 +241,6 @@ class SiteController {
           
         });
       }
-      res.render('confirmUser/index', {
-        title: 'Xác thực',
-      })
 
     }
 
@@ -227,10 +248,20 @@ class SiteController {
         // oder
         const oders = getOder(req);
         var count_cart = 0;
+        var orderNew = [];
         if (oders) {
             oders.forEach(oder => {
                 var count = oder.quantity * oder.price;
                 count_cart += count;
+                productImageModel.findOne({
+                  attributes: ['id', 'url', 'name'],
+                  where: { 
+                    id_product: oder.id
+                  }
+                }).then((image) => {
+                  oder.url = image.url;
+                  orderNew.push(oder);
+                })
             });
         }
 
@@ -241,7 +272,7 @@ class SiteController {
 
         res.render('cart/index', {
             title: 'Giỏ hàng',
-            oders: oders,
+            oders: orderNew,
             user: checkLogin,
             count_cart: count_cart
         });
@@ -271,10 +302,22 @@ class SiteController {
         // oder
         const oders = getOder(req);
         var count_cart = 0;
+        var orderNew = [];
         if (oders) {
             oders.forEach(oder => {
+
                 var count = oder.quantity * oder.price;
                 count_cart += count;
+
+                productImageModel.findOne({
+                  attributes: ['id', 'url', 'name'],
+                  where: { 
+                    id_product: oder.id
+                  }
+                }).then((image) => {
+                  oder.url = image.url;
+                  orderNew.push(oder);
+                })
             });
         }
 
@@ -290,12 +333,20 @@ class SiteController {
               address = address.dataValues;
             }
         }
+        var discount = 0;
+        if (req.cookies.discount) {
+          var discounts = req.cookies.discount;
+          if (checkLogin.id == discounts.user) {
+            discount = discounts.discount;
+          }
+        }
 
         res.render('checkout/index', {
             title: 'Thanh toán',
-            oders: oders,
+            oders: orderNew,
             count_cart: count_cart,
             address: address,
+            discount: discount,
             idUser: checkLogin.id
         });
     }
@@ -2051,6 +2102,15 @@ class SiteController {
             </html>`,
         }).then(() => {
             res.clearCookie("oders");
+            if (req.cookies.discount) {
+              discountModel.update({
+                status: 0
+              },{
+                where: { code: req.cookies.discount.code }
+              }).then(() => {
+                res.clearCookie("discount");
+              })
+            }
             res.render('confirmation/index', {
                 title: 'Cảm ơn'
             });
@@ -2099,10 +2159,20 @@ class SiteController {
       // oder
       const oders = getOder(req);
       var count_cart = 0;
+      var orderNew = [];
       if (oders) {
           oders.forEach(oder => {
               var count = oder.quantity * oder.price;
               count_cart += count;
+              productImageModel.findOne({
+                attributes: ['id', 'url', 'name'],
+                where: { 
+                  id_product: oder.id
+                }
+              }).then((image) => {
+                oder.url = image.url;
+                orderNew.push(oder);
+              })
           });
       }
       
@@ -2111,7 +2181,7 @@ class SiteController {
             title: 'Đơn hàng',
             user: checkLogin,
             oderDetail: oderDetail,
-            oders: oders,
+            oders: orderNew,
             count_cart: count_cart
         });
     }
@@ -2132,10 +2202,20 @@ class SiteController {
         // oder
         const oders = getOder(req);
         var count_cart = 0;
+        var orderNew = [];
         if (oders) {
             oders.forEach(oder => {
                 var count = oder.quantity * oder.price;
                 count_cart += count;
+                productImageModel.findOne({
+                  attributes: ['id', 'url', 'name'],
+                  where: { 
+                    id_product: oder.id
+                  }
+                }).then((image) => {
+                  oder.url = image.url;
+                  orderNew.push(oder);
+                })
             });
         }
 
@@ -2143,7 +2223,7 @@ class SiteController {
             title: 'Địa chỉ',
             user: checkLogin,
             address: address,
-            oders: oders,
+            oders: orderNew,
             count_cart: count_cart
         });
     }
@@ -2158,15 +2238,25 @@ class SiteController {
       // oder
       const oders = getOder(req);
       var count_cart = 0;
+      var orderNew = [];
       if (oders) {
           oders.forEach(oder => {
               var count = oder.quantity * oder.price;
               count_cart += count;
+              productImageModel.findOne({
+                attributes: ['id', 'url', 'name'],
+                where: { 
+                  id_product: oder.id
+                }
+              }).then((image) => {
+                oder.url = image.url;
+                orderNew.push(oder);
+              })
           });
       }
       res.render('contact/index', {
           title: 'Liên hệ',
-          oders: oders,
+          oders: orderNew,
           count_cart: count_cart,
           user: checkLogin
 
@@ -2229,7 +2319,7 @@ class SiteController {
 
         const fullUrl = req.protocol + '://' + req.get('host');
         const productData = await productModel.findAll({
-            attributes: ['id', 'name', 'image', 'price', 'detail', 'quantity', 'status'],
+            attributes: ['id', 'name', 'price', 'detail', 'quantity', 'status'],
             where: {
               name: {
                   [Op.like]: `%${key}%`
@@ -2241,10 +2331,20 @@ class SiteController {
 
         const oders = getOder(req);
         var count_cart = 0;
+        var orderNew = [];
         if (oders) {
             oders.forEach(oder => {
                 var count = oder.quantity * oder.price;
                 count_cart += count;
+                productImageModel.findOne({
+                  attributes: ['id', 'url', 'name'],
+                  where: { 
+                    id_product: oder.id
+                  }
+                }).then((image) => {
+                  oder.url = image.url;
+                  orderNew.push(oder);
+                })
             });
         }
 
@@ -2258,7 +2358,7 @@ class SiteController {
             key: key,
             hostName: fullUrl,
             products: products,
-            oders: oders,
+            oders: orderNew,
             count_cart: count_cart,
             user: checkLogin,
         })
@@ -2280,9 +2380,10 @@ class SiteController {
 
       const discounts = mutipleConvertToObject(discountData);
       var arrayData = [];
+      const currentDate = new Date().toISOString().split('T')[0];
+      console.log(currentDate);
       discounts.forEach(data => {
-          data.startDate = formatDate(data.startDate);
-          data.endDate = formatDate(data.endDate);
+         
           if(data.status == 1) {
               data.status = "Chưa sử dụng";
               data.color = "label-success";
@@ -2290,16 +2391,33 @@ class SiteController {
               data.status = "Đã sử dụng";
               data.color = "label-danger";
           }
+          if (data.endDate < currentDate) {
+            data.status = "Đã hết hạn";
+            data.color = "label-danger";
+          }
+          data.startDate = formatDate(data.startDate);
+          data.endDate = formatDate(data.endDate);
+          
           arrayData.push(data);
       });
 
       // oder
       const oders = getOder(req);
       var count_cart = 0;
+      var orderNew = [];
       if (oders) {
           oders.forEach(oder => {
               var count = oder.quantity * oder.price;
               count_cart += count;
+              productImageModel.findOne({
+                attributes: ['id', 'url', 'name'],
+                where: { 
+                  id_product: oder.id
+                }
+              }).then((image) => {
+                oder.url = image.url;
+                orderNew.push(oder);
+              })
           });
       }
 
@@ -2307,7 +2425,7 @@ class SiteController {
         title: 'Mã giảm giá',
         user: checkLogin,
         discounts: arrayData,
-        oders: oders,
+        oders: orderNew,
         count_cart: count_cart
       });
       

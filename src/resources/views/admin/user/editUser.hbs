@@ -16,7 +16,7 @@
         <div class="card">
           <div class="card-body">
             <button type="button" class="btn btn-primary btn-custom-css">Quay lại</button>
-            <form action="/admin/user/update" method="post"
+            <form action="/admin/user/update/{{ user.id }}" method="post"
               enctype="multipart/form-data"
               class="row g-3 needs-validation" novalidate style="margin-top: 40px;">
               <div class="col-md-12">
@@ -31,13 +31,13 @@
               </div>
               <div class="col-md-12">
                 <label for="validationCustom01" class="form-label">Email<sup style="color: red;">*</sup></label>
-                <input type="email" name="email" class="form-control"
-                  id="validationCustom01" value="{{ user.email }}" required>
+                <input type="email" class="form-control"
+                  id="validationCustom01" value="{{ user.email }}" required disabled>
               </div>
               <div class="col-md-12">
-                <label for="validationCustom02" class="form-label">Mật khẩu<sup style="color: red;">*</sup></label>
+                <label for="validationCustom02" class="form-label">Mật khẩu</label>
                 <input type="password" name="password" class="form-control"
-                  id="validationCustom02" value="" required>
+                  id="validationCustom02" value="">
               </div>
               <div class="col-md-12">
                 <label class="form-label">Role<sup style="color: red;">*</sup></label>
@@ -63,7 +63,7 @@
                   <div class="form-check">
                     <input class="form-check-input" type="checkbox" name="status" checked id="invalidCheck2">
                     <label class="form-check-label" for="invalidCheck2">
-                      Public
+                      Kích hoạt
                     </label>
                   </div>
                 </div>

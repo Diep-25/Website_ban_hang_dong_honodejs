@@ -122,13 +122,15 @@
       success: function (data, status, xhr) {
         var price = data.price;
         price = price.toLocaleString('it-IT', {style : 'currency', currency : 'VND'});
+        var fullDetail = data.detail;
+        var detail = fullDetail.substring(0, 200) + "...";
         var body = $('<div class="row"><div class="col-md-8 col-sm-6 col-xs-12"> ' +
-          '<div class="modal-image"><img class="img-responsive" src="/' + data.image + '" /></div></div>' +
+          '<div class="modal-image"><img class="img-responsive" src="/' + data.images[0].url + '" /></div></div>' +
           '<div class="col-md-4 col-sm-6 col-xs-12">' +
           '<div class="product-short-details">' +
           '<h2 class="product-title">' + data.name + '</h2>' +
           '<p class="product-price">' + price + '</p>' +
-          '<p class="product-short-description">' + data.detail + '</p>' +
+          '<p class="product-short-description">' + detail + '</p>' +
           '<a href="/product/detail/'+ data.id + '" class="btn btn-main">Xem chi tiết</a>' +
           '</div>' +
           '</div>' +

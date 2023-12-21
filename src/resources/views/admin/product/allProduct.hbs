@@ -100,7 +100,11 @@
               </div>
               <div class="col-md-12">
                 <label for="formFile" class="form-label">Ảnh<sup style="color: red;">*</sup></label>
-                <input class="form-control" name="image" type="file" id="formFile" required>
+                <div class="change-file-muti">
+                  <input class="form-control" name="image" type="file" id="formFile" required multiple>
+                  <div id="imagePreviewContainer"></div>
+                  <button type="button" class="btn btn-danger btn-delete-all" id="deleteButton" style="display:none;">Xóa tất cả</button>
+                </div>
                 <div class="valid-feedback">
                   Bạn chưa nhập ảnh sản phẩm!
                 </div>

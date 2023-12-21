@@ -1,5 +1,8 @@
 
 const productModel = require('../models/ProductModel');
+const { Op, literal } = require('sequelize');
+const productImageModel = require('../models/ProductImageModel');
+const discountModel = require('../models/DiscountModel');
 const { mutipleConvertToObject } = require('../../util/convert');
 const { getOder } = require('../../util/oders');
 
@@ -8,17 +11,33 @@ class ProductController {
     // index
     async index(req, res) {
         const productData = await productModel.findAll({
-            attributes: ['id', 'name', 'image', 'price', 'detail', 'quantity', 'status']
+            attributes: ['id', 'name', 'price', 'detail', 'quantity', 'status'],
+            include: [
+                { model: productImageModel,
+                    as: 'images'
+                },
+            ],
+            
         })
         const products = mutipleConvertToObject(productData);
         const fullUrl = req.protocol + '://' + req.get('host');
         // oder
         const oders = getOder(req);
         var count_cart = 0;
+        var orderNew = [];
         if (oders) {
             oders.forEach(oder => {
                 var count = oder.quantity * oder.price;
                 count_cart += count;
+                productImageModel.findOne({
+                    attributes: ['id', 'url', 'name'],
+                    where: { 
+                    id_product: oder.id
+                    }
+                }).then((image) => {
+                    oder.url = image.url;
+                    orderNew.push(oder);
+                })
             });
         }
 
@@ -31,7 +50,7 @@ class ProductController {
             title: 'Tất cả sản phẩm',
             hostName: fullUrl,
             products: products,
-            oders: oders,
+            oders: orderNew,
             count_cart: count_cart,
             user: checkLogin
         });
@@ -41,21 +60,47 @@ class ProductController {
 
         const fullUrl = req.protocol + '://' + req.get('host');
         const productData = await productModel.findAll({
-            attributes: ['id', 'name', 'image', 'price', 'detail', 'quantity', 'status']
+            attributes: ['id', 'name', 'price', 'detail', 'quantity', 'status'],
+            include: [
+                { model: productImageModel,
+                    as: 'images'
+                },
+            ],
+            where: { 
+                id: {
+                  [Op.ne]: req.params.id
+                }
+            },
+            limit: 4
         })
         const products = mutipleConvertToObject(productData);
-
+        
         const productsDetail = await productModel.findOne({
-            attributes: ['id', 'name', 'image', 'price', 'detail', 'quantity', 'status'],
-            where: { id: req.params.id }
+            attributes: ['id', 'name', 'price', 'detail', 'quantity', 'status'],
+            where: { id: req.params.id },
+            include: [
+                { model: productImageModel,
+                    as: 'images'
+                },
+            ],
+            
         });
-
         const oders = getOder(req);
         var count_cart = 0;
+        var orderNew = [];
         if (oders) {
             oders.forEach(oder => {
                 var count = oder.quantity * oder.price;
                 count_cart += count;
+                productImageModel.findOne({
+                    attributes: ['id', 'url', 'name'],
+                    where: { 
+                    id_product: oder.id
+                    }
+                }).then((image) => {
+                    oder.url = image.url;
+                    orderNew.push(oder);
+                })
             });
         }
 
@@ -69,7 +114,8 @@ class ProductController {
             hostName: fullUrl,
             product: productsDetail.dataValues,
             products: products,
-            oders: oders,
+            images: productsDetail.images,
+            oders: orderNew,
             count_cart: count_cart,
             user: checkLogin,
             message: alertMessage
@@ -78,8 +124,13 @@ class ProductController {
 
     async modal(req, res) {
         productModel.findOne({
-            attributes: ['id', 'name', 'image', 'price', 'detail', 'quantity', 'status'],
-            where: { id: req.params.id }
+            attributes: ['id', 'name', 'price', 'detail', 'quantity', 'status'],
+            where: { id: req.params.id },
+            include: [
+                { model: productImageModel,
+                    as: 'images'
+                },
+            ],
         })
             .then(product => res.json(product))
             .catch(err => next(err))
@@ -87,7 +138,7 @@ class ProductController {
     addCart(req, res) {
 
         productModel.findOne({
-            attributes: ['id', 'name', 'image', 'price', 'detail', 'quantity', 'status'],
+            attributes: ['id', 'name', 'price', 'quantity', 'status'],
             where: { id: req.params.id }
         })
             .then(product => {
@@ -125,6 +176,44 @@ class ProductController {
             .catch(() => {
 
             })
+    }
+    addDiscount(req, res) {
+        var checkLogin = false;
+        if (req.cookies.login) {
+            checkLogin = req.cookies.login;
+        }
+        const currentDate = new Date().toISOString().split('T')[0];
+
+        var options = {
+            maxAge: 1000 * 60 * 60,
+            httpOnly: true
+        }
+        discountModel.findOne({
+            attributes: ['code', 'discount', 'status', 'startDate', 'endDate'],
+            where: { 
+                code: req.query.code,
+                status: 1,
+                startDate: {
+                    [Op.lte]: literal(`'${currentDate}'`),
+                },
+                endDate: {
+                    [Op.gte]: literal(`'${currentDate}'`),
+                },
+            }
+        }).then((data) => {
+            if (data) {
+                var oders = {
+                    user: checkLogin.id,
+                    code: data.code,
+                    discount: data.discount
+                }
+                res.cookie('discount', oders, options);
+                res.redirect('/checkout');
+            } else {
+                res.redirect('/checkout');
+            }
+        })
+
     }
 }
 
