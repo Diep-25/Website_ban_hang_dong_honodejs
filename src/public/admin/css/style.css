@@ -1289,3 +1289,6 @@ h6 {
   display: flex;
   flex-wrap: wrap;
 }
+.hide-alert-admin {
+  display: none !important;
+}

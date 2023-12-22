@@ -28,11 +28,12 @@ class SliderAdminController {
             }
         }
 
+        const message = req.flash('success')[0] || '';
         res.render('slider/sliderAdmin', {
             title: 'Slider',
             hostName: fullUrl,
             sliders: sliders,
-            message: req.flash('create')
+            message: message
         });
     }
 
@@ -50,7 +51,7 @@ class SliderAdminController {
             status: 1,
             id_user: 1,
         });
-        req.flash('create', 'Thêm slider thành công!')
+        req.flash('success', 'Thêm slider thành công!')
         res.redirect('/admin/slider');
     }
     edit(req, res) {
@@ -99,6 +100,7 @@ class SliderAdminController {
         sliderModel.update(data, {
             where: { id: req.params.id }
         }).then(slider => {
+            req.flash('success', 'Cập nhật slider thành công!')
             res.redirect('/admin/slider');
         })
         .catch(err => next(err))
@@ -108,6 +110,7 @@ class SliderAdminController {
         sliderModel.destroy({
             where: { id: req.params.id }
         }).then(() => {
+            req.flash('success', 'Xóa slider thành công!')
             return  res.redirect('/admin/slider');
         });
     }

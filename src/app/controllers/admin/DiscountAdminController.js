@@ -34,10 +34,12 @@ class DiscountAdminController {
             }
             arrayData.push(data);
         });
+        const message = req.flash('success')[0] || '';
         res.render('discount/discountAdmin', {
             title: 'Mã giảm giá',
             discounts: arrayData,
-            users: users
+            users: users,
+            message : message
         });
     }
 
@@ -50,6 +52,7 @@ class DiscountAdminController {
             endDate: req.body.endDate,
             id_user: req.body.id_user,
         }).then(() => {
+            req.flash('success', 'Thêm mã giảm giá thành công!')
             res.redirect('/admin/discount');
         });
     }
@@ -90,6 +93,7 @@ class DiscountAdminController {
             where: { id: req.params.id }
         }
         ).then(() => {
+            req.flash('success', 'Cập nhật mã giảm giá thành công!')
             res.redirect('/admin/discount');
         }).catch(() => {
             res.redirect('/admin/discount/edit/' + req.params.id);
@@ -100,6 +104,7 @@ class DiscountAdminController {
         discountModel.destroy({
             where: { id: req.params.id},
         }).then(() => {
+            req.flash('success', 'Xóa mã giảm giá thành công!')
             res.redirect('/admin/discount');
         }).catch(() => {
             res.redirect('/admin/discount');

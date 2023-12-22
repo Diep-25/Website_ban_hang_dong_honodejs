@@ -85,6 +85,7 @@ class SiteController {
             });
         }
 
+        const message = req.flash('success')[0] || '';
         res.render('home', {
             title: 'Trang chủ',
             hostName: fullUrl,
@@ -92,19 +93,23 @@ class SiteController {
             products: products,
             user: checkLogin,
             oders: orderNew,
-            count_cart: count_cart
+            count_cart: count_cart,
+            message: message
         })
     }
 
     // login
     login(req, res) {
+      const message = req.flash('success')[0] || '';
         res.render('login/index', {
-            title: "Đăng nhập"
+            title: "Đăng nhập",
+            message: message
         });
     }
 
     logout(req, res) {
       res.clearCookie('login');
+      req.flash('success', 'Đăng xuất tài khoản thành công!')
       res.redirect('/');
     }
 
@@ -133,6 +138,7 @@ class SiteController {
                     delete userEmail.password;
                     // Set cookie
                     res.cookie('login', userEmail, options)
+                    req.flash('success', 'Đăng nhập tài khoản thành công!')
                     res.redirect('/');
                 }
 
@@ -236,6 +242,7 @@ class SiteController {
                 id: user.id
               }
           }).then(() => {
+            req.flash('success', 'Đăng ký tài khoản thành công!')
             res.redirect('/login');
           });
           
@@ -341,13 +348,15 @@ class SiteController {
           }
         }
 
+        const message = req.flash('success')[0] || '';
         res.render('checkout/index', {
             title: 'Thanh toán',
             oders: orderNew,
             count_cart: count_cart,
             address: address,
             discount: discount,
-            idUser: checkLogin.id
+            idUser: checkLogin.id,
+            message: message
         });
     }
 
@@ -360,15 +369,20 @@ class SiteController {
         })
         var idAddress = address.dataValues.id;
 
-
         var codeOder = Math.floor(100000 + Math.random() * 900000);
 
+        var discount = 0;
+        if (req.cookies.discount) {
+          var discounts = req.cookies.discount;
+          discount = discounts.discount;
+        }
         const createOder = await oderModel.create({
             payment: req.query.payment,
             code: codeOder,
             status: "Chờ phê duyệt",
             id_user: user.id,
-            id_address: idAddress
+            id_address: idAddress,
+            discount : discount
         });
         const oders = getOder(req);
         var ArrayOder = [];
@@ -2381,7 +2395,6 @@ class SiteController {
       const discounts = mutipleConvertToObject(discountData);
       var arrayData = [];
       const currentDate = new Date().toISOString().split('T')[0];
-      console.log(currentDate);
       discounts.forEach(data => {
          
           if(data.status == 1) {

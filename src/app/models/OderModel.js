@@ -8,6 +8,7 @@ const OderModel = db.sequelize.define("oders", {
     payment: { type: DataTypes.INTEGER },
     code: { type: DataTypes.INTEGER},
     status: { type: DataTypes.STRING},
+    discount: { type: DataTypes.STRING, allowNull: true},
     id_user: { type: DataTypes.INTEGER},
     id_address: { type: DataTypes.INTEGER}
 });

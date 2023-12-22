@@ -33,10 +33,12 @@ class ProductAdminController {
             
             arrayProduct.push(data);
         });
+        const message = req.flash('success')[0] || '';
         res.render('product/allProduct', {
             title: 'Sản phẩm',
             hostName: fullUrl,
             products: arrayProduct,
+            message: message
         });
     }
     async save(req, res) {
@@ -59,6 +61,7 @@ class ProductAdminController {
                     id_product: data.id
                 })
             });
+            req.flash('success', 'Thêm sản phẩm thành công!')
             res.redirect('/admin/product/all');
         });
     }
@@ -66,6 +69,7 @@ class ProductAdminController {
         productModel.destroy({
             where: { id: req.params.id }
         }).then(() => {
+            req.flash('success', 'Xóa sản phẩm thành công!')
             res.redirect('/admin/product/all');
         });
     }
@@ -117,13 +121,11 @@ class ProductAdminController {
         productModel.update(data, {
             where: { id: req.params.id }
         }).then(() => {
+            req.flash('success', 'Cập nhật sản phẩm thành công!')
             res.redirect('/admin/product/all');
         })
     }
 
 }
-
-
-
 
 module.exports = new ProductAdminController;

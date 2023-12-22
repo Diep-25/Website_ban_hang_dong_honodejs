@@ -328,11 +328,14 @@
     $.ajax('/admin/order/detail/' + $(this).attr('id'), {
       type: 'GET',
       success: function (data, status, xhr) {
-
         var body = '';
         var countOder = 0;
         for (let index = 0; index < data.length; index++) {
-          var price = data[index].product.price;
+          var discount = 0;
+          if (data[index].oder.discount != null) {
+            discount = data[index].oder.discount;
+          }
+          var price = data[index].Product.price;
           var count = (data[index].quantity) * price;
           countOder += count;
           count = count.toLocaleString('it-IT', {style : 'currency', currency : 'VND'});
@@ -340,17 +343,19 @@
 
           body += '<tr class="table-success">'+
             '<th>#'+ data[index].oder.code +'</th>'+
-            '<td>'+ data[index].product.name +'</td>'+
+            '<td>'+ data[index].Product.name +'</td>'+
             '<td>'+ data[index].quantity +'</td>'+
             '<td>'+ price +'</td>'+
             '<td>'+ count +'</td>'+
           '</tr>';
         }
+        const countDiscount =  (discount / 100) * countOder;
+        var countOderAll = countOder - countDiscount;
+        countOderAll = countOderAll.toLocaleString('it-IT', {style : 'currency', currency : 'VND'});
         countOder = countOder.toLocaleString('it-IT', {style : 'currency', currency : 'VND'});
-        var discount = 0;
         var detail = '<p style="font-weight: bold;">Thành tiền: '+ countOder +'</p>'+
-        '<p style="font-weight: bold;">Giảm: '+ discount +'</p>'+
-        '<p style="font-weight: bold;">Tổng tiền: '+ countOder +'</p>';
+        '<p style="font-weight: bold;">Giảm giá: '+ discount +'%</p>'+
+        '<p style="font-weight: bold;">Tổng tiền: '+ countOderAll +'</p>';
         $('.detail-count-oder-js').html(detail);
         $('.body-table-oder-js').html(body);
       },
@@ -412,6 +417,17 @@
       $("#formFile").val(null);
       $("#imagePreviewContainer").empty();
       $(this).hide();
+  });
+
+  $(document).ready(function(){
+    setTimeout(function() { 
+      $('.js-hide-alert-admin').addClass('hide-alert-admin');//show
+    }, 2000);
+
+  });
+
+  $(".js-btn-close-admin").click(function(){
+    $('.js-hide-alert-admin').addClass('hide-alert-admin');
   });
   
 

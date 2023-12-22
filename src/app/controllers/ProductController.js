@@ -208,6 +208,7 @@ class ProductController {
                     discount: data.discount
                 }
                 res.cookie('discount', oders, options);
+                req.flash('success', 'Áp dụng mã giả giá thành công!')
                 res.redirect('/checkout');
             } else {
                 res.redirect('/checkout');

@@ -24,9 +24,11 @@ class UserAdminController {
         
         const oders = mutipleConvertToObject(orderData);
 
+        const message = req.flash('success')[0] || '';
         res.render('order/allOrder', {
             title: 'Đơn hàng',
-            oders: oders
+            oders: oders,
+            message: message
         });
     }
 
@@ -48,6 +50,7 @@ class UserAdminController {
         }, {
             where: { id: req.params.id }
         }).then(() => {
+            req.flash('success', 'Đơn hàng đã duyệt thành công!')
             res.redirect('/admin/order');
         })
     }

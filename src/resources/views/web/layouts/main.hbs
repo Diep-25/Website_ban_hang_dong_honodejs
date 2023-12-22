@@ -11,7 +11,7 @@
 
   <meta name="theme-name" content="DiepNV" />
   
-  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.png" />
+  <link rel="shortcut icon" type="image/x-icon" href="/web/images/favicon.png" />
   
   <link rel="stylesheet" href="/web/plugins/themefisher-font/style.css">
 
@@ -29,6 +29,15 @@
 
 <body id="body">
 
+{{#if message}}
+      <div
+      class="alert alert-primary bg-primary text-light border-0 alert-dismissible custom-alert js-hide-alert"
+      role="alert">
+      {{ message }}
+      <button type="button" class="btn-close btn-close-white js-btn-close"
+        data-bs-dismiss="alert" aria-label="Close">X</button>
+    </div>
+{{/if}}
 
 <!-- Start Top Header Bar -->
 {{> header }}

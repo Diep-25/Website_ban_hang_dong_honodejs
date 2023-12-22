@@ -140,12 +140,17 @@
     });
   });
 
+  $(document).ready(function(){
+    setTimeout(function() { 
+      $('.js-hide-alert').addClass('hide');//show
+    }, 2000);
 
-  // $('#product-quantity').change(function () {
-  //   var idProduct = $(this).attr('data-id');
-  //   var valueQuantity = $(this).val();
-  //   console.log($.cookie('oders'));
-  // });
+  });
+
+  $(".js-btn-close").click(function(){
+    $('.js-hide-alert').addClass('hide');
+  });
+
 
   
 

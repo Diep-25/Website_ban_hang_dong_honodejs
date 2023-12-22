@@ -11,7 +11,7 @@
  Target Server Version : 100425
  File Encoding         : 65001
 
- Date: 21/12/2023 23:44:28
+ Date: 23/12/2023 00:12:42
 */
 
 SET NAMES utf8mb4;
@@ -58,13 +58,17 @@ CREATE TABLE `detail_orders`  (
   INDEX `id_order`(`id_order` ASC) USING BTREE,
   CONSTRAINT `detail_orders_ibfk_1` FOREIGN KEY (`id_product`) REFERENCES `products` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `detail_orders_ibfk_2` FOREIGN KEY (`id_order`) REFERENCES `oders` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 23 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 27 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of detail_orders
 -- ----------------------------
 INSERT INTO `detail_orders` VALUES (21, 22, 1, 18, '2023-12-14 15:46:24', '2023-12-14 15:46:24');
 INSERT INTO `detail_orders` VALUES (22, 22, 1, 19, '2023-12-14 15:46:24', '2023-12-14 15:46:24');
+INSERT INTO `detail_orders` VALUES (23, 23, 2, 18, '2023-12-22 14:29:40', '2023-12-22 14:29:40');
+INSERT INTO `detail_orders` VALUES (24, 23, 14, 19, '2023-12-22 14:29:40', '2023-12-22 14:29:40');
+INSERT INTO `detail_orders` VALUES (25, 24, 1, 19, '2023-12-22 15:56:31', '2023-12-22 15:56:31');
+INSERT INTO `detail_orders` VALUES (26, 25, 1, 18, '2023-12-22 15:59:53', '2023-12-22 15:59:53');
 
 -- ----------------------------
 -- Table structure for discounts
@@ -89,7 +93,7 @@ CREATE TABLE `discounts`  (
 -- Records of discounts
 -- ----------------------------
 INSERT INTO `discounts` VALUES (5, 'xpaGvAHr', 30, 0, 1, '2023-12-04', '2023-12-22', '2023-12-14 15:46:30', '2023-12-04 13:35:06');
-INSERT INTO `discounts` VALUES (6, 'xpaGvAHb', 30, 1, 1, '2023-12-04', '2023-12-27', '2023-12-04 13:35:06', '2023-12-04 13:35:06');
+INSERT INTO `discounts` VALUES (6, 'xpaGvAHb', 30, 0, 1, '2023-12-04', '2023-12-27', '2023-12-22 15:59:56', '2023-12-04 13:35:06');
 
 -- ----------------------------
 -- Table structure for oders
@@ -102,6 +106,7 @@ CREATE TABLE `oders`  (
   `id_user` int NULL DEFAULT NULL,
   `id_address` int NULL DEFAULT NULL,
   `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `discount` int NULL DEFAULT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
   PRIMARY KEY (`id`) USING BTREE,
@@ -109,12 +114,15 @@ CREATE TABLE `oders`  (
   INDEX `id_address`(`id_address` ASC) USING BTREE,
   CONSTRAINT `oders_ibfk_2` FOREIGN KEY (`id_user`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
   CONSTRAINT `oders_ibfk_3` FOREIGN KEY (`id_address`) REFERENCES `addresses` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 23 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 26 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of oders
 -- ----------------------------
-INSERT INTO `oders` VALUES (22, 474527, 1, 1, 1, 'Đã phê duyệt', '2023-12-14 15:46:24', '2023-12-21 15:02:27');
+INSERT INTO `oders` VALUES (22, 474527, 1, 1, 1, 'Đã phê duyệt', NULL, '2023-12-14 15:46:24', '2023-12-21 15:02:27');
+INSERT INTO `oders` VALUES (23, 907885, 1, 1, 1, 'Chờ phê duyệt', NULL, '2023-12-22 14:29:40', '2023-12-22 14:29:40');
+INSERT INTO `oders` VALUES (24, 786747, 1, 1, 1, 'Chờ phê duyệt', NULL, '2023-12-22 15:56:30', '2023-12-22 15:56:30');
+INSERT INTO `oders` VALUES (25, 179449, 1, 1, 1, 'Chờ phê duyệt', 30, '2023-12-22 15:59:53', '2023-12-22 15:59:53');
 
 -- ----------------------------
 -- Table structure for product_images
@@ -130,7 +138,7 @@ CREATE TABLE `product_images`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `id_product`(`id_product` ASC) USING BTREE,
   CONSTRAINT `product_images_ibfk_1` FOREIGN KEY (`id_product`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 23 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of product_images
@@ -142,6 +150,16 @@ INSERT INTO `product_images` VALUES (9, 'web/images/products/Dong-ho-Nam-Thomas-
 INSERT INTO `product_images` VALUES (10, 'web/images/products/Dong-ho-Nam-Tsar-Bomba-TB8206A-BOLIVE-1.jpg', 'Đồng hồ Nam Tsar Bomba TB8206A-BOLIVE', 19, '2023-12-08 17:15:24', '2023-12-08 17:15:24');
 INSERT INTO `product_images` VALUES (11, 'web/images/products/Dong-ho-Nam-Tsar-Bomba-TB8206A-BOLIVE-2.jpg', 'Đồng hồ Nam Tsar Bomba TB8206A-BOLIVE', 19, '2023-12-08 17:15:24', '2023-12-08 17:15:24');
 INSERT INTO `product_images` VALUES (12, 'web/images/products/Dong-ho-Nam-Tsar-Bomba-TB8206A-BOLIVE-3.jpg', 'Đồng hồ Nam Tsar Bomba TB8206A-BOLIVE', 19, '2023-12-08 17:15:24', '2023-12-08 17:15:24');
+INSERT INTO `product_images` VALUES (13, 'web/images/products/183392423_Untitled-51.jpg', 'Đồng hồ Diamond D DM5308B5IG', 20, '2023-12-22 16:50:57', '2023-12-22 16:50:57');
+INSERT INTO `product_images` VALUES (14, 'web/images/products/628997965_DONG-HO-CHINH-HANG-8.jpg', 'Đồng hồ Diamond D DM5308B5IG', 20, '2023-12-22 16:50:57', '2023-12-22 16:50:57');
+INSERT INTO `product_images` VALUES (15, 'web/images/products/2131891116_dong-ho-nu-thoi-trang1003-2049500238.jpg', 'Đồng hồ Diamond D DM5308B5IG', 20, '2023-12-22 16:50:57', '2023-12-22 16:50:57');
+INSERT INTO `product_images` VALUES (16, 'web/images/products/dong-ho-nu-thoi-trang5-1046537586jpg5-1067894693.jpg', 'Đồng hồ Diamond D DM5308B5IG', 20, '2023-12-22 16:50:57', '2023-12-22 16:50:57');
+INSERT INTO `product_images` VALUES (17, 'web/images/products/402712975_DONG-HO-CHINH-HANG-8.jpg', 'Đồng hồ Diamond D DM64205IG-R', 21, '2023-12-22 16:53:24', '2023-12-22 16:53:24');
+INSERT INTO `product_images` VALUES (18, 'web/images/products/1119721610_dong-ho-nu-thoi-trang.jpg', 'Đồng hồ Diamond D DM64205IG-R', 21, '2023-12-22 16:53:24', '2023-12-22 16:53:24');
+INSERT INTO `product_images` VALUES (19, 'web/images/products/1133644626_dong-ho-chihh-hang-1.jpg', 'Đồng hồ Diamond D DM64205IG-R', 21, '2023-12-22 16:53:24', '2023-12-22 16:53:24');
+INSERT INTO `product_images` VALUES (20, 'web/images/products/1477535241_dong-ho-nu-thoi-trang5.jpg', 'Đồng hồ Diamond D DM64205IG-R', 21, '2023-12-22 16:53:24', '2023-12-22 16:53:24');
+INSERT INTO `product_images` VALUES (21, 'web/images/products/2114420124_dong ho nu dinh da (2).jpg', 'Đồng hồ Diamond D DM4633B5', 22, '2023-12-22 16:56:00', '2023-12-22 16:56:00');
+INSERT INTO `product_images` VALUES (22, 'web/images/products/dong-ho-nu-dinh-da-1-889276078 (1).jpg', 'Đồng hồ Diamond D DM4633B5', 22, '2023-12-22 16:56:00', '2023-12-22 16:56:00');
 
 -- ----------------------------
 -- Table structure for products
@@ -161,13 +179,16 @@ CREATE TABLE `products`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `id_user`(`id_user` ASC) USING BTREE,
   CONSTRAINT `products_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 20 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 23 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of products
 -- ----------------------------
 INSERT INTO `products` VALUES (18, 'Đồng hồ Nam Thomas Earnshaw ES-8807-04', NULL, 710000, 'Hãng Thomas Earnshaw được thành lập vào năm năm 1972 tại số 119 High Hoblborn bởi một công dân nước Anh tên là Mr. Thomas Earnshaw. Thương hiệu này đã đi qua 200 năm với nhiều giai đoạn suy thịnh nhưng vẫn duy trì tiêu chuẩn cao về chất lượng và thiết kế của các mẫu đồng hồ. Các đồng hồ Thomas Earnshaw vừa mang trong mình tinh thần của thời đại cổ điển và kỹ thuật đồng hồ truyền thống vừa đáp ứng được sự đa dạng và thị hiếu của người tiêu dùng hiện đại. Trong đó có mẫu Đồng hồ Nam Thomas Earnshaw ES-8807-04 là một trong những mẫu đồng hồ nam sang trọng và đẳng cấp của thương hiệu,  được thiết kế sang trọng và thanh lịch mà những người yêu thích đồng hồ không thể bỏ qua.', 12, 1, 1, '2023-12-08 16:55:57', '2023-12-08 16:55:57');
 INSERT INTO `products` VALUES (19, 'Đồng hồ Nam Tsar Bomba TB8206A-BOLIVE', NULL, 10584000, 'Nét đặc biệt của Đồng hồ Tsar Bomba nằm ở thiết kế độc đáo của nó. Mặt số và vỏ được chế tác cẩn thận, tái hiện hình ảnh và ý nghĩa của bom Tsar Bomba một cách tinh tế. Sự kết hợp giữa nghệ thuật và kỹ thuật không chỉ tạo nên một tác phẩm nghệ thuật đẹp mắt mà còn là một biểu tượng của sự tinh tế trong công nghệ đồng hồ.\r\n\r\nĐồng hồ Tsar Bomba không chỉ là một chiếc đồng hồ đẹp mắt, mà còn là một công cụ đo thời gian đáng tin cậy với bộ máy Nhật độ chính xác cao. Được trang bị các tính năng hiện đại như khả năng chống nước, kính Sapphire chống xước, và dây đeo Silicon siêu bền, nó là một biểu tượng của sự hoàn thiện trong cả thiết kế và chất lượng.', 23, 2, 1, '2023-12-08 17:15:24', '2023-12-08 17:15:24');
+INSERT INTO `products` VALUES (20, 'Đồng hồ Diamond D DM5308B5IG', NULL, 3850000, 'Thương hiệu: Đồng hồ nữ Diamond D\r\n\r\nKiểu dáng: Đồng hồ nữ\r\n\r\nMáy: Quartz\r\n\r\nChất liệu vỏ: Hợp kim mạ PVD , đính đá swarovsky\r\n\r\nChất liệu dây: Hợp kim mạ PVD , đính đá swarovsky\r\n\r\nMặt kính: Sapphire ( Kính chống trầy )\r\n\r\nKích thước: 25 mm\r\n\r\nChống nước: 3 ATM\r\n\r\nBảo hành: 10 năm về máy và đá , 2 năm về pin\r\n\r\nMáy: Japan Myota citizen Quartz', 23, 1, 1, '2023-12-22 16:50:57', '2023-12-22 16:50:57');
+INSERT INTO `products` VALUES (21, 'Đồng hồ Diamond D DM64205IG-R', NULL, 4123000, 'Thương hiệu: Đồng hồ nữ Diamond D\r\n\r\nKiểu dáng: Đồng hồ nữ\r\n\r\nMáy: Quartz\r\n\r\nChất liệu vỏ: Hợp kim mạ PVD , đính đá swarovsky\r\n\r\nChất liệu dây: dây da\r\n\r\nMặt kính: Sappire ( Kính chống trầy )\r\n\r\nKích thước: 33 mm\r\n\r\nChống nước: 3 ATM\r\n\r\nBảo hành trọn đời về máy và đá , 2 năm về pin\r\n\r\nMáy: Japan Myota citizen Quartz', 34, 2, 1, '2023-12-22 16:53:24', '2023-12-22 16:53:24');
+INSERT INTO `products` VALUES (22, 'Đồng hồ Diamond D DM4633B5', NULL, 3990000, 'New', 13, 0, 1, '2023-12-22 16:56:00', '2023-12-22 16:56:00');
 
 -- ----------------------------
 -- Table structure for roles
@@ -205,14 +226,13 @@ CREATE TABLE `sliders`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `id_user`(`id_user` ASC) USING BTREE,
   CONSTRAINT `sliders_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sliders
 -- ----------------------------
 INSERT INTO `sliders` VALUES (1, 'Slider 1', 'New', 'web/images/slider/banner-1.jpg', '/', 1, 1, 1, '2023-10-31 12:36:09', '2023-10-31 12:36:09');
-INSERT INTO `sliders` VALUES (2, 'Slider 2', 'New', 'web/images/slider/banner-2.jpg', '/', 2, 1, 1, '2023-10-31 12:36:31', '2023-10-31 12:36:31');
-INSERT INTO `sliders` VALUES (3, 'Slider 3', 'New', 'web/images/slider/banner-3.jpg', '/', 3, 1, 1, '2023-10-31 12:36:46', '2023-10-31 12:36:46');
+INSERT INTO `sliders` VALUES (6, 'Slider 2', 'Slider 2', 'web/images/slider/banner-2.jpg', '/', 1, 1, 1, '2023-12-22 16:46:17', '2023-12-22 16:46:17');
 
 -- ----------------------------
 -- Table structure for users
@@ -233,7 +253,7 @@ CREATE TABLE `users`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `id_role`(`id_role` ASC) USING BTREE,
   CONSTRAINT `users_ibfk_1` FOREIGN KEY (`id_role`) REFERENCES `roles` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 26 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 27 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of users

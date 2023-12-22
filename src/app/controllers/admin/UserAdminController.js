@@ -30,11 +30,12 @@ class UserAdminController {
             arrayUser.push(data);
         });
 
+        const message = req.flash('success')[0] || '';
         res.render('user/allUser', {
             title: 'Người dùng',
             hostName: fullUrl,
             users: arrayUser,
-            message: req.flash('create')
+            message: message
         });
     }
 
@@ -60,7 +61,7 @@ class UserAdminController {
         bcrypt.hash(req.body.password, 10, (err, hash) => {
             data.password = hash;
             userModel.create(data).then(() => {
-                req.flash('create', 'Thêm user thành công!')
+                req.flash('success', 'Thêm người dùng thành công!')
                 res.redirect('/admin/user');
             });
         })
@@ -121,6 +122,7 @@ class UserAdminController {
         userModel.update(data, {
             where: { id: req.params.id }
         }).then(() => {
+            req.flash('success', 'Cập nhật người dùng thành công!')
             res.redirect('/admin/user');
         })
         .catch(err => next(err))
